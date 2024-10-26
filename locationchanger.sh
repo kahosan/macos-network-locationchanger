@@ -24,7 +24,14 @@ ts() {
 ID=`whoami`
 ts "I am '$ID'"
 
-SSID=`/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep ' SSID' | cut -d : -f 2- | sed 's/^[ ]*//'`
+# not work in Sequoia
+# SSID=`/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep ' SSID' | cut -d : -f 2- | sed 's/^[ ]*//'`
+
+# one
+SSID=`networksetup -getairportnetwork en0 | awk -F ': ' '{print $2}'`
+# tow
+# SSID=`ipconfig getsummary en0 | awk -F ' SSID : '  '/ SSID : / {print $2}'`
+
 
 LOCATION_NAMES=`scselect | tail -n +2 | cut -d \( -f 2- | sed 's/)$//'`
 CURRENT_LOCATION=`scselect | tail -n +2 | egrep '^\ +\*' | cut -d \( -f 2- | sed 's/)$//'`
